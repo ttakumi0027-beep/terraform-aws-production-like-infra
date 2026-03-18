@@ -114,6 +114,17 @@ resource "aws_subnet" "db_private_subnet_1c" {
   }
 }
 
+
+# ------------------------
+# VPC Endpnt
+# ------------------------
+variable "vpc_endpoints" {
+  type    = list(string)
+  default = ["ssm", "ssmmessages", "ec2messages"]
+}
+
+
+
 # ------------------------
 # Route Table
 # ------------------------
