@@ -1,3 +1,10 @@
+
+locals {
+  name   = "terraform"
+  region = "ap-northeast-1"
+}
+
+
 # ------------------------
 # Tag name
 # ------------------------

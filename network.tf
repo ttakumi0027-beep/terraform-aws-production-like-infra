@@ -123,6 +123,29 @@ variable "vpc_endpoints" {
   default = ["ssm", "ssmmessages", "ec2messages"]
 }
 
+resource "aws_vpc_endpoint" "vpc_endpoints" {
+  for_each = toset(var.vpc_endpoints)
+
+  vpc_id              = aws_vpc.vpc.id
+  service_name        = "com.amazonaws.${local.region}.${each.value}"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+
+  subnet_ids = [
+    aws_subnet.app_private_subnet_1a.id,
+    aws_subnet.app_private_subnet_1c.id
+  ]
+
+  security_group_ids = [
+    aws_security_group.vpce_sg.id
+  ]
+
+  tags = {
+    Name    = "${var.project}-${var.environment}-${each.value}-vpce"
+    Project = var.project
+    Env     = var.environment
+  }
+}
 
 
 # ------------------------

@@ -15,4 +15,3 @@ resource "aws_key_pair" "kaypair" {
 # ------------------------
 # EC2 for Appserver
 # ------------------------
-
