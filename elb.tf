@@ -67,8 +67,76 @@ resource "aws_lb_target_group" "alb_target_group" {
 }
 
 # 単体EC2テスト用（ASG化したら削除）
-resource "aws_lb_target_group_attachment" "instance" {
-  target_group_arn = aws_lb_target_group.alb_target_group.arn
-  target_id        = aws_instance.app_server.id
-  port             = 80
+# resource "aws_lb_target_group_attachment" "instance" {
+#   target_group_arn = aws_lb_target_group.alb_target_group.arn
+#   target_id        = aws_instance.app_server.id
+#   port             = 80
+# }
+
+# ------------------------
+# Auto scaling group
+# ------------------------
+resource "aws_autoscaling_group" "app_asg" {
+  name                = "${var.project}-${var.environment}-app-asg"
+  min_size = 2
+  max_size = 4
+  desired_capacity = 2
+  vpc_zone_identifier = [
+    aws_subnet.app_private_subnet_1a.id,
+    aws_subnet.app_private_subnet_1c.id
+  ]
+
+  target_group_arns = [
+    aws_lb_target_group.alb_target_group.arn
+  ]
+
+  health_check_type = "ELB"
+  health_check_grace_period = 300
+
+  launch_template {
+   id = aws_launch_template.app_lt.id
+   version = "$Latest"
+  }
+
+  tag {
+    key                 = "Name"
+    value               = "${var.project}-${var.environment}-app-server"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Project"
+    value               = var.project
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Env"
+    value               = var.environment
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Type"
+    value               = "app"
+    propagate_at_launch = true
+  }
+}
+
+
+# ------------------------
+# Target Tracking Scaling Policy
+# ------------------------
+resource "aws_autoscaling_policy" "app_asg_cpu_policy" {
+  name                   = "${var.project}-${var.environment}-app-asg-cpu-policy"
+  autoscaling_group_name = aws_autoscaling_group.app_asg.name
+  policy_type            = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+
+    target_value = 50.0
+  }
 }
