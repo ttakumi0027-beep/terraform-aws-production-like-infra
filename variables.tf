@@ -26,3 +26,11 @@ variable "iam_users" {
     groups = list(string)
   }))
 }
+
+# ------------------------
+# Domain
+# ------------------------
+
+variable "domain" {
+  type = string
+}

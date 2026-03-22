@@ -77,9 +77,9 @@ resource "aws_lb_target_group" "alb_target_group" {
 # Auto scaling group
 # ------------------------
 resource "aws_autoscaling_group" "app_asg" {
-  name                = "${var.project}-${var.environment}-app-asg"
-  min_size = 2
-  max_size = 4
+  name             = "${var.project}-${var.environment}-app-asg"
+  min_size         = 2
+  max_size         = 4
   desired_capacity = 2
   vpc_zone_identifier = [
     aws_subnet.app_private_subnet_1a.id,
@@ -90,12 +90,12 @@ resource "aws_autoscaling_group" "app_asg" {
     aws_lb_target_group.alb_target_group.arn
   ]
 
-  health_check_type = "ELB"
+  health_check_type         = "ELB"
   health_check_grace_period = 300
 
   launch_template {
-   id = aws_launch_template.app_lt.id
-   version = "$Latest"
+    id      = aws_launch_template.app_lt.id
+    version = "$Latest"
   }
 
   tag {
