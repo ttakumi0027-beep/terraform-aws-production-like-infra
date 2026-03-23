@@ -30,7 +30,6 @@ variable "iam_users" {
 # ------------------------
 # Domain
 # ------------------------
-
 variable "domain" {
   type = string
 }

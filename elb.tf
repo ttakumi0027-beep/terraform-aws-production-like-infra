@@ -22,21 +22,38 @@ resource "aws_lb" "alb" {
   }
 }
 
+# リスナーポート80
 resource "aws_lb_listener" "alb_listener_http" {
   load_balancer_arn = aws_lb.alb.arn
   port              = 80
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.alb_target_group.arn
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }
 
 
 
-# HTTPS有効化のリスナーをのちに記載する
+# リスナーポート443
+resource "aws_lb_listener" "alb_listener_https" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = aws_acm_certificate_validation.alb_cert.certificate_arn
 
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.alb_target_group.arn
+  }
+}
 
 
 
@@ -66,12 +83,6 @@ resource "aws_lb_target_group" "alb_target_group" {
   }
 }
 
-# 単体EC2テスト用（ASG化したら削除）
-# resource "aws_lb_target_group_attachment" "instance" {
-#   target_group_arn = aws_lb_target_group.alb_target_group.arn
-#   target_id        = aws_instance.app_server.id
-#   port             = 80
-# }
 
 # ------------------------
 # Auto scaling group
