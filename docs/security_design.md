@@ -57,6 +57,16 @@ RDSはアプリケーションサーバからの通信のみ許可する。
 
 ---
 
+### SSMセキュリティグループ構成
+
+| Type | Port | Source |
+|-----|-----|------|
+| HTTPS | 443 | EC2 Security Group |
+
+SSMはアプリケーションサーバからの通信のみ許可する。
+
+---
+
 ## 4. 踏み台サーバ廃止設計
 
 EC2への接続は踏み台サーバを使用せず、AWS Systems Manager Session Managerを利用する。
@@ -91,11 +101,5 @@ RDSには以下のセキュリティ対策を適用する。
 - Security Groupによるアクセス制御
 - Multi-AZ構成
 - 自動バックアップ
-
----
-
-## 7. 最小権限の原則
-
-IAMポリシーはLeast Privilege Principle（最小権限の原則）に基づき設計する。
 
 ---
