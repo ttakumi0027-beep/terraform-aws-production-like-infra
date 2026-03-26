@@ -30,8 +30,6 @@
 
 インターネットからのHTTP/HTTPSリクエストを受け付け、Auto Scaling Group内のEC2インスタンスへトラフィックを分散する。
 
----
-
 ### Application Layer
 
 - Amazon EC2
@@ -44,13 +42,11 @@ Webサーバおよびアプリケーションサーバとして動作する。
 - 負荷に応じたスケールアウト
 - インスタンス障害時の自動復旧
 
----
-
 ### Database Layer
 
 - Amazon RDS
 
-アプリケーションデータを管理するリレーショナルデータベース。
+アプリケーションデータを管理するリレーショナルデータベースとする。
 
 Multi-AZ構成により以下を実現する。
 
@@ -76,7 +72,7 @@ Availability Zoneに障害が発生した場合でも、サービス継続が可
 
 Auto Scaling Groupを利用し、CloudWatchメトリクスに応じてEC2インスタンスを自動スケールする。
 
-スケーリング条件
+スケーリング条件は下記とする。
 
 - CPU使用率
 - ALBリクエスト数
@@ -95,14 +91,15 @@ EC2への管理アクセスはSSHは使用せず、AWS Systems Manager Session M
 
 ---
 
-## 6. 監視設計
+## 6. 監視・監査設計
 
-以下のサービスを利用して監視を行う。
+以下のサービスを利用して監視・監査を行う。
 
 - Amazon CloudWatch
+- AWS CloudTrail
 - ALB Health Check
 - Auto Scaling Health Check
 
-異常検知時にはAuto Scalingにより、インスタンスの自動復旧を行う。
+異常検知時にはAuto Scalingによるインスタンスの自動復旧を行い、AWS操作の監査証跡の記録を行う。
 
 ---
