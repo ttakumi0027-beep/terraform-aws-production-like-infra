@@ -33,3 +33,17 @@ variable "iam_users" {
 variable "domain" {
   type = string
 }
+
+# ------------------------
+# DB login 
+# ------------------------
+variable "db_username" {
+  type        = string
+  description = "username for RDS"
+}
+
+variable "db_password" {
+  type        = string
+  description = "password for RDS"
+  sensitive   = true
+}
