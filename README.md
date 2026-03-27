@@ -6,7 +6,7 @@
 本構成は、実務で利用される一般的なWeb3層アーキテクチャをベースに、セキュリティ・可用性・運用性を考慮して設計しています。
 
 ## 構成図
-<img src="./images/architecture.png" width="100%">
+<img src="./images/architecture.png" width="80%">
 
 ## 使用技術
 - AWS
