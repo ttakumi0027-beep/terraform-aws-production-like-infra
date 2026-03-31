@@ -83,7 +83,7 @@
 ```
 # 本リポジトリでは、Terraformコードだけでなく、設計書・構成図・初期設定用スクリプトもあわせて管理し、構築意図が分かるようにしています。
 .
-├── terraform/
+├── terraform-aws-production-like-infra/
 │   ├── docs/
 │   │   ├── architecture.md        # AWS構成設計書
 │   │   ├── iam_design.md          # IAM構成設計書
